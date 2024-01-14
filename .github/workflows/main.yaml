@@ -8,18 +8,22 @@ jobs:
   build:
     name: Build Fyne App
     runs-on: macos-latest
-    env:
-      VERSIONTAG: ${{ github.event.release.tag_name }}
 
     steps:
     - name: Check out code
       uses: actions/checkout@v2
 
+    - name: Set up Go
+      uses: actions/setup-go@v2
+
     - name: Install fyne-cross
       run: go install github.com/fyne-io/fyne-cross@latest
 
     - name: Build Fyne App for Darwin
-      run: fyne-cross darwin -name "Textstorm" -icon big_icon.png -app-id se.stenstromen.textstorm -app-version VERSIONTAG -release
+      run: fyne-cross darwin -name "Textstorm" -icon big_icon.png -app-id se.stenstromen.textstorm -app-version ${{ env.VERSIONTAG }} -release
+      env:
+        VERSIONTAG: 1.0.0
+        PATH: ${{ github.workspace }}/go/bin:$PATH
 
     - name: Zip the Textstorm.app bundle
       run: zip -r Textstorm.zip fyne-cross/dist/darwin-amd64/Textstorm.app
