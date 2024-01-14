@@ -1,0 +1,31 @@
+name: Build and Package Fyne App
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+    name: Build Fyne App
+    runs-on: macos-latest
+    env:
+      VERSIONTAG: ${{ github.event.release.tag_name }}
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Install fyne-cross
+      run: go install fyne.io/fyne/v2/cmd/fyne-cross@latest
+
+    - name: Build Fyne App for Darwin
+      run: fyne-cross darwin -name "Textstorm" -icon big_icon.png -app-id se.stenstromen.textstorm -app-version VERSIONTAG -release
+
+    - name: Zip the Textstorm.app bundle
+      run: zip -r Textstorm.zip fyne-cross/dist/darwin-amd64/Textstorm.app
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: Textstorm-MacOS
+        path: Textstorm.zip
