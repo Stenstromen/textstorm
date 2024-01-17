@@ -14,7 +14,6 @@ jobs:
     env:
       GOARCH: ${{ matrix.arch }}
       CC: /usr/bin/clang
-      GOPATH: /Users/runner/go
 
     steps:
       - name: Check out code
