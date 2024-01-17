@@ -25,17 +25,18 @@ jobs:
         with:
           go-version: '1.21.x'
 
+      - name: Add GOPATH/bin to PATH
+        run: echo "$GOPATH/bin" >> $GITHUB_PATH
+
       - name: Install fyne
         run: go get fyne.io/fyne/v2/cmd/fyne
 
       - name: Build Fyne App for Darwin ${{ matrix.arch }}
         run: |
-          ls - $GOPATH/bin
           CGO_ENABLED=1 GOOS=darwin GOARCH=${{ matrix.arch }} go build -o textstorm
           fyne package -os darwin -name "Textstorm" -icon big_icon.png --executable textstorm --appID se.stenstromen.textstorm --appVersion ${{ env.VERSIONTAG }} --release
         env:
           VERSIONTAG: ${{ github.event.release.tag_name }}
-          PATH: ${{ github.workspace }}/go/bin:$PATH
 
       - name: Zip the Textstorm.app bundle for ${{ matrix.arch }}
         run: zip -r Textstorm-${{ matrix.arch }}.zip Textstorm.app
