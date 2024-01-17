@@ -13,6 +13,7 @@ jobs:
         arch: [amd64, arm64]
     env:
       GOARCH: ${{ matrix.arch }}
+      CC: /usr/bin/clang
 
     steps:
       - name: Check out code
