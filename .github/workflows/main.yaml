@@ -16,16 +16,12 @@ jobs:
 
     steps:
       - name: Check out code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
 
-      - name: Set up Go
-        uses: actions/setup-go@v2
-
-      - name: Update PATH for Go
-        run: echo "/usr/local/go/bin" >> $GITHUB_PATH
-
-      - name: Print PATH
-        run: echo $PATH
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21.x'
 
       - name: Install fyne
         run: go get fyne.io/fyne/v2/cmd/fyne
@@ -42,7 +38,7 @@ jobs:
         run: zip -r Textstorm-${{ matrix.arch }}.zip Textstorm.app
 
       - name: Upload Artifact for ${{ matrix.arch }}
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: Textstorm-MacOS-${{ matrix.arch }}
           path: Textstorm-${{ matrix.arch }}.zip
