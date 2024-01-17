@@ -28,12 +28,11 @@ jobs:
       - name: Install fyne
         run: |
           go get fyne.io/fyne/v2/cmd/fyne
-          echo "$GOPATH/bin" >> $GITHUB_PATH
 
       - name: Build Fyne App for Darwin ${{ matrix.arch }}
         run: |
           CGO_ENABLED=1 GOOS=darwin GOARCH=${{ matrix.arch }} go build -o textstorm
-          fyne package -os darwin -name "Textstorm" -icon big_icon.png --executable textstorm --appID se.stenstromen.textstorm --appVersion ${{ env.VERSIONTAG }} --release
+          /Users/runner/go/bin/fyne package -os darwin -name "Textstorm" -icon big_icon.png --executable textstorm --appID se.stenstromen.textstorm --appVersion $VERSIONTAG --release
         env:
           VERSIONTAG: ${{ github.event.release.tag_name }}
 
