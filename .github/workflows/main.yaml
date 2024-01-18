@@ -25,20 +25,10 @@ jobs:
           go-version: '1.21.x'
 
       - name: Install fyne
-        run: |
-          go get fyne.io/fyne/v2/cmd/fyne
+        run: go install fyne.io/fyne/v2/cmd/fyne@latest
 
-      - name: Echo environment variables
-        run: |
-          echo "PATH: $PATH"
-          echo "GOPATH: $(go env GOPATH)"
-          echo "GOROOT: $(go env GOROOT)"
-
-      - name: List common Go binary locations
-        run: |
-          ls -la /usr/local/go/bin || true
-          ls -la $(go env GOPATH)/bin || true
-          ls -la ~/go/bin || true
+      - name: List fyne installation
+        run: ls -la $(go env GOPATH)/bin
 
       - name: Build Fyne App for Darwin ${{ matrix.arch }}
         run: |
