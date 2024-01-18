@@ -33,7 +33,11 @@ jobs:
       - name: Build Fyne App for Darwin ${{ matrix.arch }}
         run: |
           CGO_ENABLED=1 GOOS=darwin GOARCH=${{ matrix.arch }} go build -o textstorm
-          $(go env GOPATH)/bin/fyne package -os darwin -name "Textstorm" -icon big_icon.png --executable textstorm --appID se.stenstromen.textstorm --appVersion $VERSIONTAG --release
+          if [ "${{ matrix.arch }}" = "arm64" ]; then
+            $(go env GOPATH)/bin/darwin_arm64/fyne package -os darwin -name "Textstorm" -icon big_icon.png --executable textstorm --appID se.stenstromen.textstorm --appVersion $VERSIONTAG --release
+          else
+            $(go env GOPATH)/bin/fyne package -os darwin -name "Textstorm" -icon big_icon.png --executable textstorm --appID se.stenstromen.textstorm --appVersion $VERSIONTAG --release
+          fi
         env:
           VERSIONTAG: ${{ github.event.release.tag_name }}
 
