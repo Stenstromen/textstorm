@@ -36,9 +36,9 @@ jobs:
 
       - name: List common Go binary locations
         run: |
-          ls -la /usr/local/go/bin
-          ls -la $(go env GOPATH)/bin
-          ls -la ~/go/bin
+          ls -la /usr/local/go/bin || true
+          ls -la $(go env GOPATH)/bin || true
+          ls -la ~/go/bin || true
 
       - name: Build Fyne App for Darwin ${{ matrix.arch }}
         run: |
