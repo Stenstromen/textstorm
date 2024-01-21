@@ -21,12 +21,9 @@ jobs:
       - name: Install fyne
         run: go install fyne.io/fyne/v2/cmd/fyne@latest
 
-      - name: List fyne installation
-        run: ls -la $(go env GOPATH)/bin
-
       - name: Build Fyne App
         run: |
-          CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -o textstorm
+          GOOS=darwin GOARCH=arm64 go build -o textstorm
           $(go env GOPATH)/bin/fyne package -os darwin -name "Textstorm" -icon big_icon.png --executable textstorm --appID se.stenstromen.textstorm --appVersion $VERSIONTAG --release
         env:
           VERSIONTAG: ${{ github.event.release.tag_name }}
