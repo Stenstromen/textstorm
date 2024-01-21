@@ -7,7 +7,7 @@ on:
 jobs:
   build:
     name: Build Fyne App
-    runs-on: macos-latest
+    runs-on: macos-13-arm64
 
     steps:
       - name: Check out code
@@ -23,7 +23,7 @@ jobs:
 
       - name: Build Fyne App
         run: |
-          GOOS=darwin GOARCH=arm64 go build -o textstorm
+          CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -o textstorm
           $(go env GOPATH)/bin/fyne package -os darwin -name "Textstorm" -icon big_icon.png --executable textstorm --appID se.stenstromen.textstorm --appVersion $VERSIONTAG --release
         env:
           VERSIONTAG: ${{ github.event.release.tag_name }}
