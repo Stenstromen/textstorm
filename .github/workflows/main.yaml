@@ -6,14 +6,8 @@ on:
 
 jobs:
   build:
-    name: Build Fyne App on ${{ matrix.arch }}
+    name: Build Fyne App
     runs-on: macos-latest
-    strategy:
-      matrix:
-        arch: [amd64, arm64]
-    env:
-      GOARCH: ${{ matrix.arch }}
-      CC: /usr/bin/clang
 
     steps:
       - name: Check out code
@@ -30,22 +24,18 @@ jobs:
       - name: List fyne installation
         run: ls -la $(go env GOPATH)/bin
 
-      - name: Build Fyne App for Darwin ${{ matrix.arch }}
+      - name: Build Fyne App
         run: |
-          CGO_ENABLED=1 GOOS=darwin GOARCH=${{ matrix.arch }} go build -o textstorm
-          if [ "${{ matrix.arch }}" = "arm64" ]; then
-            $(go env GOPATH)/bin/darwin_arm64/fyne package -os darwin -name "Textstorm" -icon big_icon.png --executable textstorm --appID se.stenstromen.textstorm --appVersion $VERSIONTAG --release
-          else
-            $(go env GOPATH)/bin/fyne package -os darwin -name "Textstorm" -icon big_icon.png --executable textstorm --appID se.stenstromen.textstorm --appVersion $VERSIONTAG --release
-          fi
+          CGO_ENABLED=1 GOOS=darwin GOARCH=arm64 go build -o textstorm
+          $(go env GOPATH)/bin/fyne package -os darwin -name "Textstorm" -icon big_icon.png --executable textstorm --appID se.stenstromen.textstorm --appVersion $VERSIONTAG --release
         env:
           VERSIONTAG: ${{ github.event.release.tag_name }}
 
-      - name: Zip the Textstorm.app bundle for ${{ matrix.arch }}
-        run: zip -r Textstorm-${{ matrix.arch }}.zip Textstorm.app
+      - name: Zip the Textstorm.app bundle
+        run: zip -r Textstorm.zip Textstorm.app
 
-      - name: Upload Artifact for ${{ matrix.arch }}
+      - name: Upload Artifact
         uses: actions/upload-artifact@v3
         with:
-          name: Textstorm-MacOS-${{ matrix.arch }}
-          path: Textstorm-${{ matrix.arch }}.zip
+          name: Textstorm-MacOS
+          path: Textstorm.zip
